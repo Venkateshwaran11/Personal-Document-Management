@@ -1,0 +1,33 @@
+<form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label>{{ 'APP.TITLE' | translate }}</label>
+        <input type="text" formControlName="title" placeholder="My Aadhar Card">
+    </div>
+
+    <div class="form-group">
+        <label>{{ 'APP.TYPE' | translate }}</label>
+        <select formControlName="type">
+            <option *ngFor="let type of docTypes" [value]="type">{{ type }}</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>{{ 'APP.DOC_NUMBER' | translate }}</label>
+        <input type="text" formControlName="docNumber" placeholder="XXXX-XXXX-XXXX">
+    </div>
+
+    <div class="form-group">
+        <label>{{ 'APP.UPLOAD_FILE' | translate }}</label>
+        <div *ngIf="editData && selectedFileBase64" class="current-file-info">
+            <span class="file-status"><mat-icon class="icon-sm">check_circle</mat-icon> {{ 'APP.FILE_ATTACHED' |
+                translate }}</span>
+            <small class="text-muted">{{ 'APP.REPLACE_FILE' | translate }}</small>
+        </div>
+        <input type="file" (change)="onFileSelected($event)" accept="image/*,application/pdf">
+    </div>
+
+    <button type="submit" class="btn-primary" [disabled]="uploadForm.invalid || isLoading">
+        <div *ngIf="isLoading" class="spinner light sm" style="margin-right: 8px;"></div>
+        {{ (isLoading ? 'APP.SAVING' : 'APP.SAVE_DOC') | translate }}
+    </button>
+</form>

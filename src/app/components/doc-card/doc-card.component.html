@@ -1,0 +1,42 @@
+<div class="doc-card">
+    <div class="doc-header">
+        <div class="doc-type-badge">{{ doc.type }}</div>
+        <div class="actions">
+            <button class="btn-icon edit" (click)="onEdit()" [title]="'APP.EDIT' | translate">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button class="btn-icon delete" (click)="onDelete()" [title]="'APP.DELETE' | translate">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <div class="doc-content">
+        <h3>{{ doc.title }}</h3>
+        <div class="text-muted" style="margin-bottom: 1rem; font-size: 0.8rem;">
+            {{ 'APP.UPLOADED' | translate }}: {{ doc.createdAt | date:'mediumDate' }}
+        </div>
+        <div class="doc-number-row">
+            <span class="number">{{ maskedNumber }}</span>
+            <div style="display: flex; gap: 4px;">
+                <button type="button" class="btn-icon toggle" (click)="copyToClipboard()"
+                    [title]="'APP.COPY' | translate">
+                    <mat-icon [class.success]="isCopied">{{ isCopied ? 'check' : 'content_copy' }}</mat-icon>
+                </button>
+                <button type="button" class="btn-icon toggle" (click)="toggleMask()" [title]="'APP.TOGGLE' | translate">
+                    <mat-icon>{{ isMasked ? 'visibility' : 'visibility_off' }}</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="file-actions" *ngIf="doc.fileUrl">
+            <button class="btn-outline" (click)="onView()">
+                {{ 'APP.VIEW_DOC' | translate }} <mat-icon>visibility</mat-icon>
+            </button>
+            <a [href]="doc.fileUrl" [download]="doc.title || 'document'" target="_blank" rel="noopener noreferrer"
+                class="download-link" [title]="'APP.DOWNLOAD' | translate">
+                <mat-icon>download</mat-icon>
+            </a>
+        </div>
+    </div>
+</div>

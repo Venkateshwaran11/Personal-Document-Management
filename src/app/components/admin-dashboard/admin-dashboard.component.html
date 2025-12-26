@@ -1,0 +1,183 @@
+<div class="admin-container">
+    <div class="header">
+        <div class="title-row">
+            <button class="back-btn" (click)="goBack()">
+                <mat-icon>arrow_back</mat-icon> {{ 'APP.BACK' | translate }}
+            </button>
+            <h1>{{ 'APP.ADMIN_DASHBOARD' | translate }}</h1>
+        </div>
+
+        <div class="tabs">
+            <button [class.active]="activeTab === 'users'" (click)="setTab('users')">{{ 'APP.MANAGE_USERS' | translate
+                }}</button>
+            <button [class.active]="activeTab === 'stats'" (click)="setTab('stats')">{{ 'APP.SYSTEM_STATS' | translate
+                }}</button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div *ngIf="isLoading" class="loading-container">
+            <img src="assets/doc-loader.svg" alt="Loading data..." class="loader-gif">
+            <span>{{ 'APP.LOADING' | translate }}</span>
+        </div>
+
+        <!-- Users Tab -->
+        <div *ngIf="!isLoading && activeTab === 'users'" class="users-list">
+            <div class="user-card header-card">
+                <div class="col">{{ 'APP.USERNAME' | translate }}</div>
+                <div class="col">{{ 'APP.EMAIL' | translate }}</div>
+                <div class="col">{{ 'APP.ROLE' | translate }}</div>
+                <div class="col">{{ 'APP.LAST_LOGIN' | translate }}</div>
+                <div class="col actions">{{ 'APP.ACTIONS' | translate }}</div>
+            </div>
+
+            <div *ngFor="let user of users" class="user-card" [class.editing]="editUserId === user._id">
+                <ng-container *ngIf="editUserId !== user._id">
+                    <div class="col font-bold">{{ user.username }}</div>
+                    <div class="col">{{ user.email }}</div>
+                    <div class="col">
+                        <span class="badge" [class.admin]="user.role === 'admin'">{{ user.role }}</span>
+                    </div>
+                    <div class="col text-muted">
+                        <span *ngIf="user.lastLogin">{{ user.lastLogin | date:'medium' }}</span>
+                        <span *ngIf="!user.lastLogin" class="never">{{ 'APP.NEVER_LOGGED_IN' | translate }}</span>
+                    </div>
+                    <div class="col actions">
+                        <button class="btn-icon edit" (click)="startEdit(user)" [title]="'APP.EDIT_USER' | translate">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button class="btn-icon role" (click)="toggleAdmin(user)"
+                            [title]="(user.role === 'admin' ? 'APP.REVOKE_ADMIN' : 'APP.MAKE_ADMIN') | translate">
+                            <mat-icon>{{ user.role === 'admin' ? 'person_off' : 'verified_user' }}</mat-icon>
+                        </button>
+                        <button class="btn-icon delete" (click)="deleteUser(user._id)" *ngIf="user.role !== 'admin'"
+                            [title]="'APP.DELETE_USER' | translate">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="editUserId === user._id">
+                    <div class="col">
+                        <input type="text" [(ngModel)]="editingUser.username" class="edit-input">
+                    </div>
+                    <div class="col">
+                        <input type="email" [(ngModel)]="editingUser.email" class="edit-input">
+                    </div>
+                    <div class="col">
+                        <select [(ngModel)]="editingUser.role" class="edit-select">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="col text-muted">---</div>
+                    <div class="col actions">
+                        <button class="btn-icon save" (click)="saveUser()" [title]="'APP.SAVE_CHANGES' | translate">
+                            <mat-icon>check</mat-icon>
+                        </button>
+                        <button class="btn-icon cancel" (click)="cancelEdit()" [title]="'APP.CANCEL' | translate">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
+
+            <div *ngIf="users.length === 0" class="empty">{{ 'APP.NO_USERS' | translate }}</div>
+        </div>
+
+        <!-- Stats Tab -->
+        <div *ngIf="!isLoading && activeTab === 'stats'" class="stats-grid">
+            <!-- Top Summary Cards -->
+            <div class="stat-card">
+                <div class="stat-icon users"><mat-icon>group</mat-icon></div>
+                <div class="stat-info">
+                    <h3>{{ 'APP.TOTAL_USERS' | translate }}</h3>
+                    <div class="value">{{ stats?.users || 0 }}</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon docs"><mat-icon>description</mat-icon></div>
+                <div class="stat-info">
+                    <h3>{{ 'APP.TOTAL_DOCS' | translate }}</h3>
+                    <div class="value">{{ stats?.documents || 0 }}</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon contacts"><mat-icon>contact_phone</mat-icon></div>
+                <div class="stat-info">
+                    <h3>{{ 'APP.TOTAL_CONTACTS' | translate }}</h3>
+                    <div class="value">{{ stats?.contacts || 0 }}</div>
+                </div>
+            </div>
+
+            <!-- 7-Day Growth Trends -->
+            <div class="stat-card full-width">
+                <div class="card-header">
+                    <h3>{{ 'APP.ACTIVITY_TREND' | translate }}</h3>
+                    <span class="subtitle">{{ 'APP.LAST_7_DAYS' | translate }}</span>
+                </div>
+                <div class="trend-container">
+                    <div class="trend-section">
+                        <h4>{{ 'APP.DOCUMENTS' | translate }}</h4>
+                        <div class="bar-chart">
+                            <div *ngFor="let day of processedDocTrend" class="bar-wrapper"
+                                [title]="day._id + ': ' + day.count">
+                                <div class="bar doc-bar"
+                                    [style.height.%]="getTrendPercentage(day.count, getTrendMax(processedDocTrend))">
+                                </div>
+                                <span class="bar-label">{{ day._id | date:'dd/MM' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="trend-section">
+                        <h4>{{ 'APP.CONTACTS' | translate }}</h4>
+                        <div class="bar-chart">
+                            <div *ngFor="let day of processedContactTrend" class="bar-wrapper"
+                                [title]="day._id + ': ' + day.count">
+                                <div class="bar contact-bar"
+                                    [style.height.%]="getTrendPercentage(day.count, getTrendMax(processedContactTrend))">
+                                </div>
+                                <span class="bar-label">{{ day._id | date:'dd/MM' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Distribution Breakdowns -->
+            <div class="stat-card half-width">
+                <h3>{{ 'APP.DOCS_BY_TYPE' | translate }}</h3>
+                <div class="type-list" *ngIf="stats?.distribution?.length > 0; else noDocs">
+                    <div *ngFor="let item of stats?.distribution" class="type-item">
+                        <span class="type-name">{{ item._id }}</span>
+                        <div class="type-progress">
+                            <div class="progress-bar doc-bar" [style.width.%]="(item.count / stats.documents) * 100">
+                            </div>
+                        </div>
+                        <span class="type-count">{{ item.count }}</span>
+                    </div>
+                </div>
+                <ng-template #noDocs>
+                    <div class="empty-state">{{ 'APP.NO_DOCS_ANALYTICS' | translate }}</div>
+                </ng-template>
+            </div>
+
+            <div class="stat-card half-width">
+                <h3>{{ 'APP.CONTACTS_BY_CATEGORY' | translate }}</h3>
+                <div class="type-list" *ngIf="stats?.categoryDistribution?.length > 0; else noContacts">
+                    <div *ngFor="let item of stats?.categoryDistribution" class="type-item">
+                        <span class="type-name">{{ item._id }}</span>
+                        <div class="type-progress">
+                            <div class="progress-bar contact-bar" [style.width.%]="(item.count / stats.contacts) * 100">
+                            </div>
+                        </div>
+                        <span class="type-count">{{ item.count }}</span>
+                    </div>
+                </div>
+                <ng-template #noContacts>
+                    <div class="empty-state">{{ 'APP.NO_CONTACTS_ANALYTICS' | translate }}</div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>

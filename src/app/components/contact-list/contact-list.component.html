@@ -1,0 +1,41 @@
+<div class="contacts-container">
+    <div class="header-actions">
+        <h2>{{ 'CONTACTS.TITLE' | translate }}</h2>
+        <div class="search-bar">
+            <mat-icon>search</mat-icon>
+            <input type="text" [placeholder]="'CONTACTS.SEARCH' | translate" [(ngModel)]="searchQuery">
+        </div>
+        <button mat-raised-button color="primary" (click)="addContact()">
+            <mat-icon>add</mat-icon> {{ 'CONTACTS.ADD' | translate }}
+        </button>
+    </div>
+
+    <div *ngIf="isLoading" class="loading">
+        <mat-icon class="spin">sync</mat-icon>
+        <span>{{ 'APP.LOADING' | translate }}</span>
+    </div>
+
+    <div *ngIf="!isLoading && filteredContacts.length === 0" class="empty-state">
+        <mat-icon>contact_page</mat-icon>
+        <p>{{ 'CONTACTS.NO_CONTACTS' | translate }}</p>
+    </div>
+
+    <div class="grid-layout" *ngIf="!isLoading">
+        <div class="contact-card" *ngFor="let contact of filteredContacts">
+            <div class="contact-header">
+                <div class="avatar">{{ contact.name[0].toUpperCase() }}</div>
+                <div class="actions">
+                    <button class="btn-icon" (click)="editContact(contact)"><mat-icon>edit</mat-icon></button>
+                    <button class="btn-icon delete"
+                        (click)="deleteContact(contact._id!)"><mat-icon>delete</mat-icon></button>
+                </div>
+            </div>
+            <div class="contact-body">
+                <h3>{{ contact.name }}</h3>
+                <p class="mobile"><mat-icon>phone</mat-icon> {{ contact.mobileNumber }}</p>
+                <p class="email" *ngIf="contact.email"><mat-icon>email</mat-icon> {{ contact.email }}</p>
+                <span class="category-badge" [class]="contact.category?.toLowerCase()">{{ contact.category }}</span>
+            </div>
+        </div>
+    </div>
+</div>

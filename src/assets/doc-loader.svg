@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Document Outline -->
+  <rect x="25" y="15" width="50" height="70" rx="5" fill="#f8fafc" stroke="#2563eb" stroke-width="3"/>
+  <!-- Text Lines -->
+  <rect x="35" y="25" width="30" height="4" rx="2" fill="#cbd5e1"/>
+  <rect x="35" y="35" width="30" height="4" rx="2" fill="#cbd5e1"/>
+  <rect x="35" y="45" width="30" height="4" rx="2" fill="#cbd5e1"/>
+  <rect x="35" y="55" width="20" height="4" rx="2" fill="#cbd5e1"/>
+  
+  <!-- Scanning Line -->
+  <line x1="20" y1="20" x2="80" y2="20" stroke="#2563eb" stroke-width="4" stroke-linecap="round" opacity="0.8">
+    <animate attributeName="y1" from="20" to="80" dur="1.5s" repeatCount="indefinite" />
+    <animate attributeName="y2" from="20" to="80" dur="1.5s" repeatCount="indefinite" />
+    <animate attributeName="opacity" values="0.8;0.2;0.8" dur="1.5s" repeatCount="indefinite" />
+  </line>
+</svg>

@@ -1,0 +1,363 @@
+.admin-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.title-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.title-row h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f0f2f5;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.back-btn:hover {
+    background: #e4e6e9;
+}
+
+.tabs {
+    display: flex;
+    gap: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabs button {
+    padding: 1rem 2rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: #666;
+    position: relative;
+}
+
+.tabs button.active {
+    color: #1a73e8;
+}
+
+.tabs button.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #1a73e8;
+    border-radius: 3px 3px 0 0;
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    color: #666;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.stat-card.full-width {
+    grid-column: span 3;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.stat-card.half-width {
+    grid-column: span 1.5;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.stat-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-icon mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+}
+
+.stat-icon.users {
+    background: #e8f0fe;
+    color: #1a73e8;
+}
+
+.stat-icon.docs {
+    background: #fef7e0;
+    color: #f9ab00;
+}
+
+.stat-icon.contacts {
+    background: #e6fffa;
+    color: #00897b;
+}
+
+.stat-info h3 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.stat-info .value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+    margin-top: 0.2rem;
+}
+
+/* Trends */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.subtitle {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+.trend-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+.trend-section h4 {
+    margin: 0 0 1.5rem 0;
+    font-size: 1rem;
+    color: #444;
+}
+
+.bar-chart {
+    height: 150px;
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #eee;
+}
+
+.bar-wrapper {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+}
+
+.bar {
+    width: 100%;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+
+.doc-bar {
+    background: #f9ab00;
+}
+
+.contact-bar {
+    background: #00897b;
+}
+
+.bar-label {
+    position: absolute;
+    bottom: -25px;
+    font-size: 0.75rem;
+    color: #888;
+    white-space: nowrap;
+}
+
+/* Distribution */
+.type-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-top: 1rem;
+}
+
+.type-item {
+    display: grid;
+    grid-template-columns: 100px 1fr 40px;
+    align-items: center;
+    gap: 1rem;
+}
+
+.type-name {
+    font-size: 0.9rem;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.type-progress {
+    height: 8px;
+    background: #f0f2f5;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    border-radius: 4px;
+}
+
+.type-count {
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: right;
+}
+
+/* User List Styling */
+.user-card {
+    display: grid;
+    grid-template-columns: 1.5fr 2fr 1fr 1fr 0.5fr;
+    padding: 1.2rem;
+    background: white;
+    margin-bottom: 0.8rem;
+    border-radius: 12px;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.header-card {
+    background: none;
+    box-shadow: none;
+    font-weight: 600;
+    color: #666;
+    padding-bottom: 0.5rem;
+}
+
+.badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    background: #f1f3f4;
+    text-transform: capitalize;
+}
+
+.badge.admin {
+    background: #e8f0fe;
+    color: #1a73e8;
+}
+
+.never {
+    color: #ccc;
+    font-style: italic;
+    font-size: 0.85rem;
+}
+
+.user-card.editing {
+    border: 2px solid #1a73e8;
+    background: #f8fbff;
+}
+
+.edit-input,
+.edit-select {
+    width: 90%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.edit-input:focus,
+.edit-select:focus {
+    outline: none;
+    border-color: #1a73e8;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.btn-icon:hover {
+    background: #f1f3f4;
+    color: #333;
+}
+
+.btn-icon.delete:hover {
+    background: #feebe9;
+    color: #d93025;
+}
+
+.empty-state {
+    padding: 2rem;
+    text-align: center;
+    color: #999;
+    font-size: 0.9rem;
+    font-style: italic;
+    background: #fcfcfc;
+    border-radius: 8px;
+    border: 1px dashed #eee;
+    margin-top: 1rem;
+}
+
+@media (max-width: 900px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card.full-width,
+    .stat-card.half-width {
+        grid-column: span 1;
+    }
+
+    .trend-container {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,53 @@
+<div class="docs-container">
+    <div class="header-actions">
+        <h2>{{ 'APP.MY_DOCUMENTS' | translate }}</h2>
+        <button class="btn-primary" (click)="openUpload()">
+            <mat-icon>add</mat-icon> {{ 'APP.ADD_DOCUMENT' | translate }}
+        </button>
+    </div>
+
+    <div class="controls-row">
+        <label>{{ 'APP.GROUP_BY' | translate }}:</label>
+        <div class="btn-group">
+            <button [class.active]="groupBy === 'none'" (click)="setGroupBy('none')">{{ 'APP.NONE' | translate
+                }}</button>
+            <button [class.active]="groupBy === 'type'" (click)="setGroupBy('type')">{{ 'APP.TYPE' | translate
+                }}</button>
+            <button [class.active]="groupBy === 'date'" (click)="setGroupBy('date')">{{ 'APP.DATE' | translate
+                }}</button>
+        </div>
+    </div>
+
+    <div class="loading-container" *ngIf="isLoading">
+        <img src="assets/doc-loader.svg" alt="Loading requests..." class="loader-gif">
+        <span>{{ 'APP.LOADING' | translate }}</span>
+    </div>
+
+    <div class="empty-state" *ngIf="!isLoading && documents.length === 0">
+        <p>{{ 'APP.NO_DOCS' | translate }}</p>
+    </div>
+
+    <div *ngIf="!isLoading && documents.length > 0">
+        <div *ngFor="let group of groupedDocuments" class="doc-group">
+            <div class="group-header" [ngClass]="group.colorClass || 'default'">
+                {{ group.title }} ({{ group.docs.length }})
+            </div>
+            <div class="grid-layout">
+                <app-doc-card *ngFor="let doc of group.docs" [doc]="doc" (delete)="onDelete($event)"
+                    (edit)="onEdit($event)"></app-doc-card>
+            </div>
+        </div>
+    </div>
+
+    <!-- Valid modal implementation -->
+    <div class="modal-overlay" *ngIf="showUploadModal" (click)="closeModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <button class="close-btn" (click)="closeModal()">
+                <mat-icon>close</mat-icon>
+            </button>
+            <h3>{{ (editingDoc ? 'APP.EDIT_DOCUMENT' : 'APP.ADD_DOCUMENT') | translate }}</h3>
+            <app-upload-doc [editData]="editingDoc" (docAdded)="onDocAdded($event)"
+                (docUpdated)="onDocUpdated($event)"></app-upload-doc>
+        </div>
+    </div>
+</div>

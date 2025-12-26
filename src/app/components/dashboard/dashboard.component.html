@@ -1,0 +1,59 @@
+<div class="dashboard-container">
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-full">{{ 'APP.TITLE' | translate }}</span>
+            <span class="logo-short">PDM</span>
+        </div>
+
+        <div class="nav-actions" style="display: flex; align-items: center; gap: 1rem;">
+            <!-- Language Selector -->
+            <button mat-button [matMenuTriggerFor]="langMenu" class="lang-btn">
+                <mat-icon>language</mat-icon>
+                <span>{{ (currentLang$ | async)?.toUpperCase() }}</span>
+            </button>
+            <mat-menu #langMenu="matMenu" class="lang-menu-panel">
+                <button mat-menu-item *ngFor="let lang of languages" (click)="changeLanguage(lang.code)"
+                    class="lang-item">
+                    <span class="lang-flag">{{ lang.flag }}</span>
+                    <span class="lang-name">{{ lang.name }}</span>
+                </button>
+            </mat-menu>
+
+            <div class="user-menu" *ngIf="user" style="display: flex; align-items: center; gap: 0.5rem;">
+                <div class="user-info" (click)="showProfile()" style="cursor: pointer;" title="View Profile">
+                    <img [src]="user?.profileImage || ('https://ui-avatars.com/api/?name=' + user?.username + '&background=2563eb&color=fff&bold=true')"
+                        class="profile-img" alt="Profile">
+                    <span class="hide-mobile">{{ 'APP.WELCOME' | translate }}, {{ user?.username }}</span>
+                </div>
+                <button class="btn-secondary" *ngIf="isAdmin" (click)="goToAdmin()"
+                    style="display: flex; align-items: center; gap: 4px;" [title]="'APP.ADMIN' | translate">
+                    <mat-icon style="font-size: 16px; height: 16px; width: 16px;">admin_panel_settings</mat-icon>
+                    <span class="hide-mobile">{{ 'APP.ADMIN' | translate }}</span>
+                </button>
+                <button class="btn-secondary" (click)="logout()" [title]="'APP.LOGOUT' | translate">
+                    <span class="hide-mobile">{{ 'APP.LOGOUT' | translate }}</span>
+                    <mat-icon
+                        style="font-size: 16px; height: 16px; width: 16px; vertical-align: middle;">logout</mat-icon>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-main">
+        <aside class="sidebar">
+            <button [class.active]="activeView === 'docs'" (click)="switchView('docs')">
+                <mat-icon>description</mat-icon>
+                <span>{{ 'APP.DASHBOARD' | translate }}</span>
+            </button>
+            <button [class.active]="activeView === 'contacts'" (click)="switchView('contacts')">
+                <mat-icon>contacts</mat-icon>
+                <span>{{ 'DASHBOARD.CONTACTS' | translate }}</span>
+            </button>
+        </aside>
+
+        <main class="content">
+            <app-document-list *ngIf="activeView === 'docs'"></app-document-list>
+            <app-contact-list *ngIf="activeView === 'contacts'"></app-contact-list>
+        </main>
+    </div>
+</div>
